@@ -46,29 +46,25 @@ class TestSubmissionIndex(unittest.TestCase):
         }
         submission_doc = SurveyResponseDocument(values=values, status="success")
         self.form_model.get_field_by_code_and_rev.return_value = self.field4
-        with patch('datawinners.search.submission_index.lookup_entity_name') as lookup_entity_name:
-            lookup_entity_name.return_value = 'clinic1'
 
-            _update_with_form_model_fields(Mock(spec=DatabaseManager), submission_doc, search_dict, self.form_model)
+        _update_with_form_model_fields(Mock(spec=DatabaseManager), submission_doc, search_dict, self.form_model)
 
-            self.assertEquals(
-                {
-                    '1212_q4': ['one', 'two'], 'is_anonymous': False,
-                    'void': False}, search_dict)
+        self.assertEquals(
+            {
+                '1212_q4': ['one', 'two'], 'is_anonymous': False,
+                'void': False}, search_dict)
 
     def test_should_update_search_dict_with_form_field_questions_for_error_submissions(self):
         search_dict = {}
         self.form_model.fields = [self.field1, self.field2, self.field3]
         values = {'q1': 'test_id', 'q2': 'wrong number', 'q3': 'wrong text'}
         submission_doc = SurveyResponseDocument(values=values, status="error")
-        with patch('datawinners.search.submission_index.lookup_entity_name') as lookup_entity_name:
-            lookup_entity_name.return_value = 'test1'
-            _update_with_form_model_fields(None, submission_doc, search_dict, self.form_model)
-            self.assertEquals(
-                {'1212_q1': 'test1', "1212_q1_unique_code": "test_id", '1212_q2': 'wrong number',
-                 '1212_q3': 'wrong text', 'is_anonymous': False,
-                 'void': False},
-                search_dict)
+        _update_with_form_model_fields(None, submission_doc, search_dict, self.form_model)
+        self.assertEquals(
+            {'1212_q1': 'test1', "1212_q1_unique_code": "test_id", '1212_q2': 'wrong number',
+             '1212_q3': 'wrong text', 'is_anonymous': False,
+             'void': False},
+            search_dict)
 
     def test_should_not_update_search_dict_with_uid_field(self):
         search_dict = {}
@@ -128,11 +124,9 @@ class TestSubmissionIndex(unittest.TestCase):
         self.form_model._doc = Mock(spec=FormModelDocument)
         self.form_model._doc.rev = "rev2"
         self.form_model.get_field_by_code_and_rev.return_value = DateField("q5", "date", "Date", "mm.yyyy")
-        with patch('datawinners.search.submission_index.lookup_entity_name') as lookup_entity_name:
-            lookup_entity_name.return_value = 'Test'
-            search_dict = _update_with_form_model_fields(Mock(spec=DatabaseManager), submission_doc, search_dict,
-                                                         self.form_model)
-            self.assertEquals("12.01.2012", search_dict.get("1212_q5"))
+        search_dict = _update_with_form_model_fields(Mock(spec=DatabaseManager), submission_doc, search_dict,
+                                                     self.form_model)
+        self.assertEquals("12.01.2012", search_dict.get("1212_q5"))
 
 
     def test_should_update_entity_field_in_submission_index(self):
@@ -160,9 +154,8 @@ class TestSubmissionIndex(unittest.TestCase):
 
                 with patch.object(SubmissionIndexUpdateHandler,
                                   'update_field_in_submission_index') as update_field_in_submission_index:
-                    update_submission_search_for_subject_edition(self.dbm, entity_type, short_code, last_name)
+                    update_submission_search_for_subject_edition(self.dbm, entity_type, short_code, last_name, [])
 
-                    # _get_submissions_for_unique_id_entry_mock.assert_called_with(**{'form_model_id_q1_unique_code': 'cli001'})
                     update_field_in_submission_index.assert_called_with('id1', {'form_model_id_q1': 'bangalore'})
 
 
@@ -176,13 +169,10 @@ class TestSubmissionIndex(unittest.TestCase):
         self.form_model.get_field_by_code_and_rev.return_value = original_field
         values = {'q1': 'ab', 'q2': 'wrong number', 'q3': 'wrong text'}
         submission_doc = SurveyResponseDocument(values=values, status="error")
-        with patch('datawinners.search.submission_index.lookup_entity_name') as lookup_entity_name:
-            lookup_entity_name.return_value = 'N/A'
-
-            _update_with_form_model_fields(Mock(spec=DatabaseManager), submission_doc, search_dict, self.form_model)
-            self.assertEquals(
-                {'1212_q1': 'N/A', '1212_q1_unique_code': 'option1,option2', 'is_anonymous': False, 'void': False},
-                search_dict)
+        _update_with_form_model_fields(Mock(spec=DatabaseManager), submission_doc, search_dict, self.form_model)
+        self.assertEquals(
+            {'1212_q1': 'N/A', '1212_q1_unique_code': 'option1,option2', 'is_anonymous': False, 'void': False},
+            search_dict)
 
     def test_generate_elastic_index_for_a_unique_id_field_in_parent_level(self):
         search_dict = {}

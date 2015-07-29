@@ -21,12 +21,20 @@ class TestSubmissionSearchStore(unittest.TestCase):
     def test_should_add_es_mapping_when_no_existing_questions_mapping(self):
         no_old_mapping = []
         es_mock = MagicMock()
-
+        form_model_mock = MagicMock(spec=FormModel)
+        ds_form_model_mock = MagicMock(spec=FormModel)
         with patch("datawinners.search.submission_index.get_elasticsearch_handle") as get_elasticsearch_handle_mock:
-            get_elasticsearch_handle_mock.return_value = es_mock
-            es_mock.get_mapping.return_value = no_old_mapping
+            with patch("datawinners.search.submission_index.get_form_model_by_entity_type") as get_form_model_mock:
+                with patch("datawinners.search.submission_index.get_form_model_by_code") as get_ds_form_model_mock:
+                    with patch(
+                            "datawinners.search.submission_index.get_ds_fields_mapping") as get_ds_fields_mapping_mock:
+                        get_elasticsearch_handle_mock.return_value = es_mock
+                        get_form_model_mock.return_value = form_model_mock
+                        get_ds_form_model_mock.return_value = ds_form_model_mock
+                        es_mock.get_mapping.return_value = no_old_mapping
+                        get_ds_fields_mapping_mock.return_value = {'reg': {'properties': []}}
 
-            SubmissionSearchStore(self.dbm, self.form_model, self.form_model).update_store()
+                        SubmissionSearchStore(self.dbm, self.form_model, self.form_model).update_store()
 
         self.assertTrue(es_mock.put_mapping.called)
 

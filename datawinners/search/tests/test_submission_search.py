@@ -28,8 +28,7 @@ class TestSubmissionResponseCreator(unittest.TestCase):
             required_field_names,
             results)
 
-        expected = [['index_id', 'answer for it', ["his_name<span class='small_grey'>  his_id</span>"],
-                     ["sub_last_name<span class='small_grey'>  subject_id</span>"]]]
+        expected = [['index_id', 'answer for it', 'his_id', 'his_name', 'sub_last_name', 'subject_id']]
         self.assertEqual(submissions, expected)
 
     def test_should_give_create_response_with_no_unique_id_fields(self):
@@ -48,7 +47,7 @@ class TestSubmissionResponseCreator(unittest.TestCase):
             required_field_names,
             results)
 
-        expected = [['index_id', ["his_name<span class='small_grey'>  his_id</span>"], 'answer']]
+        expected = [['index_id', 'his_id', 'his_name', 'answer']]
         self.assertEqual(submissions, expected)
 
     def test_should_format_repeat_with_multi_select_question(self):
@@ -137,9 +136,11 @@ class TestSubmissionResponseCreator(unittest.TestCase):
 
         entry = u'[{"group":[{"name": "messi", "unique_id":"messi", "unique_id_unique_code": "stu1" }]},{"group": [{"name": "ronaldo", "unique_id":"ronaldo", "unique_id_unique_code": "stu2" }]}]'
         actual_formatted_values = _format_fieldset_values_for_representation(entry, multi_field, "id")
-        expected_value = '<span class="repeat_ans">"<span class="repeat_qtn_label">group</span>: "<span class="repeat_qtn_label">wat is ur name</span>: messi",' \
-                         ' "<span class="repeat_qtn_label">wat is ur unique_id</span>: messi (stu1)";";<br><br>"<span class="repeat_qtn_label">group</span>:' \
-                         ' "<span class="repeat_qtn_label">wat is ur name</span>: ronaldo", "<span class="repeat_qtn_label">wat is ur unique_id</span>: ronaldo (stu2)";";<br><br></span>'
+        expected_value = u'<span class="repeat_ans">"<span class="repeat_qtn_label">group</span>: "<span class=' \
+                         u'"repeat_qtn_label">wat is ur name</span>: messi", "<span class="repeat_qtn_label">wat ' \
+                         u'is ur unique_id</span>: messi";";<br><br>"<span class="repeat_qtn_label">group</span>: ' \
+                         u'"<span class="repeat_qtn_label">wat is ur name</span>: ronaldo", "<span class="repeat_qtn_' \
+                         u'label">wat is ur unique_id</span>: ronaldo";";<br><br></span>'
         self.assertEqual(actual_formatted_values, expected_value)
 
 
