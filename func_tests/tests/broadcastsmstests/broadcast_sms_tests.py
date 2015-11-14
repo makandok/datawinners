@@ -84,7 +84,7 @@ class TestBroadcastSMS(HeadlessRunnerTest):
         self.assertTrue(send_message_page.is_send_a_message_to_unregistered_present())
         self._navigate_to_send_message_page()
 
-    @attr('functional_test')
+    @attr('functional_testa')
     def test_should_verify_the_total_number_of_anonymous_and_linked_data_senders_to_questionnaire_(self):
         dashboard_page = self.global_navigation.navigate_to_dashboard_page()
         create_questionnaire_options_page = dashboard_page.navigate_to_create_project_page()
