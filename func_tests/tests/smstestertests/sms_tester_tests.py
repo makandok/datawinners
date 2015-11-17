@@ -140,7 +140,7 @@ class TestSMSTester(HeadlessRunnerTest):
         message_tracker_after = self.trial_organization._get_message_tracker(datetime.today())
         self.assertEqual(message_tracker_before.incoming_sms_count + 1, message_tracker_after.incoming_sms_count)
 
-    @attr('functional_test')
+    @attr('functional_testa')
     def test_sms_player_for_registration_of_existing_subject_short_code(self):
         self.assertEqual(send_sms_with(REGISTER_EXISTING_SUBJECT_SHORT_CODE),
                          fetch_(ERROR_MSG, from_(REGISTER_EXISTING_SUBJECT_SHORT_CODE)))
