@@ -111,6 +111,7 @@ def success_questionnaire_submission_handler(dbm, form_code, datasender_name, li
                                                             'Name of Data Sender': datasender_name,
                                                             'List of Answers': list_of_answers
                                                             })
+    return message
     if len(message) > 160:
         message = get_customized_message_for_questionnaire(dbm, request,
                                                             message_code="reply_success_submission",
