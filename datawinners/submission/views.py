@@ -308,7 +308,7 @@ def submit_to_player(incoming_request):
         if sent_via_sms_test_questionnaire:
             organization.increment_message_count_for(incoming_web_count=1)
         message = handle(exception, incoming_request)
-        raise exception
+        message = "ito le izy %s" % type(exception)
 
     if should_increment_incoming_sms_count:
         organization.increment_incoming_message_count()
