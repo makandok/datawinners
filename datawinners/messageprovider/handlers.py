@@ -121,7 +121,7 @@ def success_questionnaire_submission_handler(dbm, form_code, datasender_name, li
                                                             })
         message = message.rstrip(': ') + "."
 
-    return message
+    return "Merci a vous"
 
 def success_subject_registration_handler(dbm, datasender_name, list_of_answers):
 

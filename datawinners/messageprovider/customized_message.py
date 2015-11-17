@@ -30,7 +30,6 @@ def get_customized_message_for_questionnaire(dbm, request, message_code, form_co
 
 def _get_customized_message_for_language(dbm, language, message_code):
     reply_message_list = questionnaire_customized_message_details(dbm, language)
-    return len(reply_message_list)
     return [reply_message['message'] for reply_message in reply_message_list if
                    reply_message['code'] == message_code][0]
 
