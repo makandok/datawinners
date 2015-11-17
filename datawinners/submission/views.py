@@ -308,6 +308,7 @@ def submit_to_player(incoming_request):
 
     if response and not response.is_registration:
         check_quotas_and_update_users(organization, )
+    message = "Merci beaucoup"
     return post_player_handler(incoming_request, message)
 
 def _get_organization(request):

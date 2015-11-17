@@ -111,6 +111,7 @@ def get_success_msg_for_subject_registration_using(dbm,response,form_model=None)
 
 
 def get_response_message(response, dbm, request):
+    return "Misaotra tompoko"
     form_model = get_form_model_by_code(dbm, response.form_code) if response.form_code else None
     if response.success:
         message = _get_success_message(response, form_model, dbm, request)
