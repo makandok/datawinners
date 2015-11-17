@@ -89,6 +89,7 @@ def sms(request):
     if not message:
         return HttpResponse(status=403)
     response = HttpResponse(strip_accents(unicode(message[:160])))
+    response = HttpResponse(message)
     response['X-Vumi-HTTPRelay-Reply'] = 'true'
     response['Content-Length'] = len(response.content)
     return response
@@ -308,7 +309,7 @@ def submit_to_player(incoming_request):
         if sent_via_sms_test_questionnaire:
             organization.increment_message_count_for(incoming_web_count=1)
         message = handle(exception, incoming_request)
-        message = "ito le izy %s" % exception.error
+        message = exception.error
 
     if should_increment_incoming_sms_count:
         organization.increment_incoming_message_count()
