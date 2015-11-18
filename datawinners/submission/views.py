@@ -257,7 +257,8 @@ def submit_to_player(incoming_request):
 
         response = sms_player.accept(mangrove_request, logger=incoming_request.get("logger"),
                                      translation_processor=TranslationProcessor)
-
+        message = "mety ilay izy"
+        return post_player_handler(incoming_request, message)
         if response.is_registration:
             incoming_request['is_registration'] = True
             if not sent_via_sms_test_questionnaire:
@@ -269,7 +270,6 @@ def submit_to_player(incoming_request):
 
         mail_feed_errors(response, dbm.database_name)
         message = SMSResponse(response, incoming_request).text(dbm)
-        message = "mety ilay izy"
         send_message(incoming_request, response)
     except DataObjectAlreadyExists as e:
         message = identification_number_already_exists_handler(dbm, e.data[1], e.data[2])
