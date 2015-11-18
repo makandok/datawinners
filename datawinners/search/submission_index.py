@@ -275,9 +275,10 @@ def update_submission_search_index(submission_doc, dbm, refresh_index=True, form
         form_model = FormModel.get(dbm, submission_doc.form_model_id)
     search_dict = _meta_fields(submission_doc, dbm)
     _update_with_form_model_fields(dbm, submission_doc, search_dict, form_model)
-    logger.exception(search_dict)
     if bulk:
         return es.index_op(search_dict, doc_type=form_model.id, index=dbm.database_name, id=submission_doc.id)
+    logger.info("Here we are")
+    logger.debug(search_dict)
     es.index(dbm.database_name, form_model.id, search_dict, id=submission_doc.id, refresh=refresh_index)
 
 
