@@ -93,7 +93,19 @@ class TestBroadcastSMS(HeadlessRunnerTest):
         questionnaire_code = self.create_questionnaire_page.get_questionnaire_code()
         overview_page = self.create_questionnaire_page.save_and_create_project_successfully()
 
-        self.create_submissions(questionnaire_code)
+        current_url = self.driver.current_url
+        from testdata.test_data import url
+        from pages.smstesterpage.sms_tester_page import SMSTesterPage
+        sms_tester_url = url("/smstester/")
+        self.driver.go_to(sms_tester_url)
+        sms_tester_page = SMSTesterPage(self.driver)
+        _from = "100"
+        _to = "919880734937"
+        message = questionnaire_code + " some_name 50 cid001"
+        data = {"sms": message, "from": _from, "to": _to, "message_id":uuid.uuid1().hex}
+        sms_tester_page.send_sms_with(data)
+        #self.create_submissions(questionnaire_code)
+        self.driver.go_to(current_url)
         send_message_page = overview_page.navigate_send_message_tab()
 
         actual_number_of_recipients = send_message_page.get_number_of_recipients_text_for_unregistered_and_associated_data_senders()
