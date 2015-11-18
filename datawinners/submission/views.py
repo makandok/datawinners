@@ -255,8 +255,6 @@ def submit_to_player(incoming_request):
                                post_sms_parser_processors=post_sms_parser_processors,
                                feeds_dbm=incoming_request['feeds_dbm'])
 
-        message = "mety ilay izy"
-        return post_player_handler(incoming_request, message)
         response = sms_player.accept(mangrove_request, logger=incoming_request.get("logger"),
                                      translation_processor=TranslationProcessor)
         if response.is_registration:
